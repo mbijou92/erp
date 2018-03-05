@@ -1,0 +1,36 @@
+{% extends 'backend.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="col-lg-9">
+            {{ form.non_field_errors }}
+            <form action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.errors }}
+                        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <button class="btn btn-primary">Speichern</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tabs %}
+    <li {% if title == "Import" %}class="active"{% endif %}><a
+        data-toggle="tab" href="{% url 'backend-import' %}">Import</a></li>
+    <li {% if title == "Erstellen" %}class="active"{% endif %}><a
+            data-toggle="tab" href="{% url 'backend-create' %}">Erstellen</a></li>
+    <li {% if title == "Ansicht" %}class="active"{% endif %}><a data-toggle="tab"
+                                                                href="{% url 'backend-list' %}">Ansicht
+    </a>
+    </li>
+{% endblock %}
+
+{% block tabs_title %}
+    <i class="fa fa-inbox"></i> Artikel {{ title }}
+{% endblock %}

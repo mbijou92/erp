@@ -1,0 +1,78 @@
+{% extends 'backend.html' %}
+{% load custom_tags %}
+
+{% block content %}
+    <div class="container">
+        <div class="col-lg-9">
+            <br/>
+            <table class="table">
+                <thead>
+                <tr>
+                    {% for name in field_verbose_names %}
+                        <th> {{ name }} </th>
+                    {% endfor %}
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for object in object_list %}
+                    <tr>
+                        {% for name in field_names %}
+                            {% if name == "image" %}
+                                <td>
+                                    {% if object|getattr_:name %}
+                                        <img src="{{ object | get_image_path_from_object:name }}"
+                                             style="width:48px;height:48px" class="img-thumbnail">
+                                    {% endif %}
+                                </td>
+                            {% else %}
+                                <td> {{ object | getattr_:name }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td><a href="{% url 'backend-update' pk=object.id %}">Bearbeiten</a></td>
+                        <td>
+                            <form action="{% url 'product_delete' object.pk %}" method="post">{% csrf_token %}
+                            <button type="submit" class="btn btn-link delete_btn">
+                                <span class="glyphicon glyphicon-trash" style="color:red;"></span>
+                            </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        var delete_btns = document.getElementsByClassName("delete_btn");
+        for(var i=0;i<delete_btns.length;i++){
+            (function(){
+                var delete_btn = delete_btns[i];
+                delete_btn.onclick = function (e) {
+                    e.preventDefault();
+                    var confirmed = confirm("Löschen?");
+                    if(confirmed == true){
+                        delete_btn.parentElement.submit();
+                    }
+                };
+            })();
+        }
+    </script>
+{% endblock %}
+
+{% block tabs %}
+    <li {% if title == "Import" %}class="active"{% endif %}><a
+        data-toggle="tab" href="{% url 'backend-import' %}">Import</a></li>
+    <li {% if title == "Erstellen" %}class="active"{% endif %}><a
+            data-toggle="tab" href="{% url 'backend-create' %}">Erstellen</a></li>
+    <li {% if title == "Ansicht" %}class="active"{% endif %}><a data-toggle="tab"
+                                                                href="{% url 'backend-list' %}">Ansicht
+    </a>
+    </li>
+{% endblock %}
+
+
+{% block tabs_title %}
+    <i class="fa fa-inbox"></i> Artikel {{ title }}
+{% endblock %}

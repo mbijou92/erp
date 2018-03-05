@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+<!DOCTYPE html>
+{% block content %}
+    <style>
+.carousel-control.left, .carousel-control.right {
+   background-image:none !important;
+   filter:none !important;
+}
+    </style>
+    <header class="bg-black text-white"
+            style=" height:200px;position: relative;">
+        <div class="container text-center">
+            <h1>Willkommen</h1>
+            <p class="lead">Bildergalerie</p>
+        </div>
+    </header>
+    <br/>
+
+    <div class="container gallery-container">
+        <h1>Produkte</h1>
+                <div class="tz-gallery">
+                    <form class="form-inline" method="GET" action=".">
+                        {% for field_name, verbose_name in field_names %}
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="{{ field_name }}" placeholder="{{ verbose_name }}" value="{{ request.GET|get_dict:field_name }}">
+                            </div>
+                        {% endfor %}
+                        <input type="submit" class="btn btn-primary" value="Filter">
+                    </form>
+                </div>
+        <div class="tz-gallery">
+            <div class="row">
+                {% for object in object_list %}
+                    {% if object.image %}
+                        <div class="col-sm-6 col-md-4">
+                            <a class="lightbox">
+                                <img src="{{ object.image.url }}" alt="{{ object.title }}" data-toggle="modal"
+                                     data-target="#image_modal" id="img_{{ forloop.counter }}"
+                                     style="width:250px;height:250px;cursor:pointer;">
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div id="image_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    {% include "modal_slider.html" %}
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Modal -->
+    <script type="text/javascript">
+        var images = [];
+        {% for object in object_list %}
+            {% if object.image %}
+                images.push({{ forloop.counter }});
+            {% endif %}
+        {% endfor %}
+
+        for (var k in images) {
+            var image_html_element = document.getElementById("img_" + images[k]);
+
+            image_html_element.onclick = function () {
+                image_data_to_modal_body(this);
+            };
+        }
+
+        var image_data_to_modal_body = function (html_element) {
+            var id_number = html_element.id.match(/\d+/);
+            var slide_image = document.getElementById("img_" + id_number + "_slide");
+            var slide_div = slide_image.parentElement;
+            slide_div.className = slide_div.className.replace("active", "") + " active";
+            var all_image_slides = [];
+            for(var k in images){
+                all_image_slides.push("img_" + images[k] + "_slide");
+            }
+            for(var k in all_image_slides){
+                var single_slide = all_image_slides[k];
+                if(single_slide != "img_" + id_number + "_slide"){
+                    document.getElementById(single_slide).parentElement.className = document.getElementById(single_slide).parentElement.className.replace("active", "");
+                }
+            }
+        };
+
+    </script>
+{% endblock %}

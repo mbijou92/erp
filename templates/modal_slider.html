@@ -1,0 +1,38 @@
+{% load humanize %}
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+   <!-- Wrapper for slides -->
+
+  <div class="carousel-inner">
+    {% for object in object_list %}
+        {% if object.image %}
+            <div class="item">
+                <div class="text-center">
+                    <h3>{{ object.supplier }}</h3>
+                    <p> {{ object.description }}</p>
+                </div>
+                <img src="{{ object.image.url }}" id="img_{{ forloop.counter }}_slide">
+                <br/>
+                <p><b>EAN: </b> {{ object.ean }}</p>
+                <p><b>Menge: </b> {{ object.amount }}</p>
+                {% if object.price %}
+                <p><b>Preis: </b> {{ object.price|floatformat:2 }}€</p>
+                {% endif %}
+                {% if object.purchase_price %}
+                <p>ID: {{ object.purchase_price }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
