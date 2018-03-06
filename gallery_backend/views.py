@@ -5,7 +5,6 @@ from gallery_backend.forms import ProductForm, ImportForm
 from product.models import Product
 from django.views.generic.base import ContextMixin
 import pyexcel
-from django.contrib import messages
 import collections
 
 
