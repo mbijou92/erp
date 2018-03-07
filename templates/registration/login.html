@@ -9,22 +9,28 @@
           <h2>Login</h2>
           <form method="post">
             {% csrf_token %}
+            {% if form.errors %}
+                <p style="color:red;">Zu den Benutzer und Passwort wurden keine Treffen gefunden.</p>
+            {% endif %}
             {{ form.username.label_tag }}
             <div class="input-group">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                 <input class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}"
                        type="text" placeholder="Benutzername"/>
             </div>
-            {{ form.username.errors }}
+            {% for error in form.username.errors %}
+                <p style="color:red">{{ error }}</p>
+            {% endfor %}
 
             {{ form.password.label_tag }}
             <div class="input-group">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
                 <input class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}"
-                       type="password" placeholder="Password"/>
+                       type="password" placeholder="Passwort"/>
             </div>
-            {{ form.password.errors }}
-            <br/>
+            {% for error in form.username.errors %}
+                <p style="color:red">{{ error }}</p>
+            {% endfor %}            <br/>
             <button type="submit" class="btn btn-primary">Login</button>
           </form>
         </div>
