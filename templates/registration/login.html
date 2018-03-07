@@ -1,0 +1,35 @@
+{% extends 'backend.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6" style="padding-bottom: 20px;">
+          <h2>Login</h2>
+          <form method="post">
+            {% csrf_token %}
+            {{ form.username.label_tag }}
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                <input class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}"
+                       type="text" placeholder="Benutzername"/>
+            </div>
+            {{ form.username.errors }}
+
+            {{ form.password.label_tag }}
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                <input class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}"
+                       type="password" placeholder="Password"/>
+            </div>
+            {{ form.password.errors }}
+            <br/>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+        </div>
+            <div class="col-lg-3"></div>
+
+    </div>
+
+{% endblock %}

@@ -6,9 +6,9 @@ from product.models import Product
 from django.views.generic.base import ContextMixin
 import pyexcel
 import collections
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-class ProductCreateMixin(ContextMixin):
+class ProductCreateMixin(ContextMixin, LoginRequiredMixin):
     extra_context = {}
 
     def get_context_data(self, **kwargs):
@@ -18,7 +18,7 @@ class ProductCreateMixin(ContextMixin):
         return context
 
 
-class ProductListMixin(ContextMixin):
+class ProductListMixin(ContextMixin, LoginRequiredMixin):
     extra_context = {}
 
     def get_context_data(self, **kwargs):
@@ -39,20 +39,20 @@ class ProductListMixin(ContextMixin):
         return context
 
 
-class ProductCreate(ProductCreateMixin, generic.CreateView):
+class ProductCreate(ProductCreateMixin, generic.CreateView, LoginRequiredMixin):
     form_class = ProductForm
     template_name = "gallery_backend/create_product.html"
     success_url = reverse_lazy("backend-list")
 
 
-class ProductList(ProductListMixin, generic.ListView):
+class ProductList(ProductListMixin, generic.ListView, LoginRequiredMixin):
     template_name = "gallery_backend/list_products.html"
 
     def get_queryset(self):
         return Product.objects.all().order_by("-id")
 
 
-class ProductUpdate(generic.UpdateView):
+class ProductUpdate(generic.UpdateView, LoginRequiredMixin):
     model = Product
     fields = "__all__"
     template_name = "gallery_backend/create_product.html"
@@ -62,7 +62,7 @@ class ProductUpdate(generic.UpdateView):
         return Product.objects.get(pk=self.kwargs.get("pk"))
 
 
-class ProductDeleteView(generic.DeleteView):
+class ProductDeleteView(generic.DeleteView, LoginRequiredMixin):
     template_name = 'confirm_delete_someitems.html'
     model = Product
     success_url = reverse_lazy('backend-list')
@@ -73,7 +73,7 @@ class ProductDeleteView(generic.DeleteView):
         return object_
 
 
-class ExcelImportView(generic.FormView):
+class ExcelImportView(generic.FormView, LoginRequiredMixin):
     template_name = "gallery_backend/import_excel.html"
     form_class = ImportForm
     success_url = reverse_lazy("backend-list")

@@ -64,7 +64,16 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
+
     <div class="content-wrapper">
+        {% if request.user.is_authenticated %}
+        <section class="content-header main-header pull-right">
+            <a href="{% url 'logout' %}">
+                <span class="glyphicon glyphicon-log-out" style="color:black;"></span>
+            </a>
+        </section>
+        <br/><br/><br/>
+        {% endif %}
         <!-- Content Header (Page header) -->
         <section class="content-header visible-xs main-header">
             <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">

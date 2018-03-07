@@ -19,10 +19,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from product.views import ProductListView
 from django.urls import include
-
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/login/', auth_views.login, name='login'),
+    path('logout/', auth_views.logout, {'next_page': 'root'}, name='logout'),
     path('gallery/', ProductListView.as_view(), name="gallery"),
     path('', ProductListView.as_view(), name="root"),
     path('', include('gallery_backend.urls')),
