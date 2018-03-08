@@ -10,6 +10,10 @@ def getattr_(obj, k):
 
 @register.filter
 def get_dict(obj, k):
+    if not obj:
+        print(obj)
+        return ""
+    print(obj[k])
     if k in obj:
         return obj[k]
     else:

@@ -6,7 +6,7 @@ from django import forms
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = "__all__"
+        exclude = ["modified", "created"]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

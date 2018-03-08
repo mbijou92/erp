@@ -49,12 +49,15 @@ class ProductList(ProductListMixin, generic.ListView, LoginRequiredMixin):
     template_name = "gallery_backend/list_products.html"
 
     def get_queryset(self):
-        return Product.objects.all().order_by("-id")
+        without_image = self.request.GET.get("without_image")
+        filter = {}
+        if without_image == "on":
+            filter["image"] = ""
+        return Product.objects.all().order_by("-id").filter(**filter)
 
 
 class ProductUpdate(generic.UpdateView, LoginRequiredMixin):
-    model = Product
-    fields = "__all__"
+    form_class = ProductForm
     template_name = "gallery_backend/create_product.html"
     success_url = reverse_lazy("backend-list")
 
