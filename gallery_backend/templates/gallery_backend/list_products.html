@@ -4,6 +4,15 @@
 {% block content %}
     <div class="container">
         <div class="col-lg-9">
+            <form method="GET" id="filter_form">
+                <div class="checkbox filter_checkbox">
+                    <label><input name="without_image" type="checkbox"
+                    {% if request.GET|get_dict:"without_image" %}
+                        checked
+                    {% endif %}
+                    ><b>Ohne Bild</b></label>
+                </div>
+            </form>
             <br/>
             <table class="table">
                 <thead>
@@ -27,7 +36,17 @@
                                     {% endif %}
                                 </td>
                             {% else %}
-                                <td> {{ object | getattr_:name }}</td>
+                                <td>
+                                    {% if name == "modified" %}
+                                        {% if object.modified %}
+                                            {{ object.modified|date:"d.m.Y H:i" }} Uhr
+                                        {% endif %}
+                                    {% elif name == "created" %}
+                                            {{ object.created|date:"d.m.Y H:i" }} Uhr
+                                    {% else %}
+                                    {{ object | getattr_:name }}
+                                    {% endif %}
+                                </td>
                             {% endif %}
                         {% endfor %}
                         <td><a href="{% url 'backend-update' pk=object.id %}">Bearbeiten</a></td>
@@ -58,6 +77,11 @@
                 };
             })();
         }
+
+        var filter_form = document.getElementById("filter_form");
+        $(".filter_checkbox").change(function(){
+            filter_form.submit();
+        });
     </script>
 {% endblock %}
 

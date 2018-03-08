@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 # Create your models here.
 
 
@@ -13,5 +13,15 @@ class Product(models.Model):
     color = models.CharField(verbose_name="Farbe", max_length=200, null=True, blank=True)
     material = models.CharField(verbose_name="Stoff", max_length=200, null=True, blank=True)
     origin = models.CharField(verbose_name="Herkunft", max_length=200, null=True, blank=True)
+    modified = models.DateTimeField('Bearbeitet', null=True, blank=True)
+    created = models.DateTimeField('Erstellt', default=timezone.now)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.localtime(timezone.now())
+        else:
+            self.modified = timezone.localtime(timezone.now())
+        return super().save(*args, **kwargs)
 
 
